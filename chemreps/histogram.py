@@ -277,7 +277,7 @@ def bin_nphisto(data):
     # bin_edges = [j for i in bin_edges for j in i]
     empty_bin = np.zeros(len(bin_edges) + 1)
 
-    return list(bin_edges), bin_minmax, list(empty_bin)
+    return list(bin_edges), list(empty_bin)
 
 def bin_kde(data, kernel='gaussian', bandwidth=.1):
     '''
@@ -319,7 +319,7 @@ def bin_kde(data, kernel='gaussian', bandwidth=.1):
     # bin_edges = [j for i in bin_edges for j in i]
     empty_bin = np.zeros(len(bin_edges) + 1)
 
-    return list(bin_edges), bin_minmax, list(empty_bin)
+    return list(bin_edges), list(empty_bin)
 
 
 def bin_npdict(info):
@@ -327,7 +327,7 @@ def bin_npdict(info):
     a_e = []
     for k in info.keys():
         data = np.array(info[k])
-        bin_edges, bin_minmax, empty_bin = bin_nphisto(data)
+        bin_edges, empty_bin = bin_nphisto(data)
         a.append([k, bin_edges])
         a_e.append([k, empty_bin])
 
@@ -340,7 +340,7 @@ def bin_kdedict(info):
     a_e = []
     for k in info.keys():
         data = np.array(info[k])
-        bin_edges, bin_minmax, empty_bin = bin_kde(data)
+        bin_edges, empty_bin = bin_kde(data)
         a.append([k, bin_edges])
         a_e.append([k, empty_bin])
 
@@ -348,33 +348,12 @@ def bin_kdedict(info):
     c_e = {t[0]:t[1:] for t in a_e}
     return c, c_e
 
-# print(len(bond_info['CC']))
 
-
-start_time = time.time()
-# bond_info = hist_maker('data/sdf/')
-bond_info = hist_maker('/Users/dakota/Molecules/QM9/QM9-sdf-rev/')
-bin_edges, empty_bin = bin_kdedict(bond_info)
-# bin_edges, empty_bin = bin_npdict(bond_info)
-end_time = time.time()
-print(bin_edges, '\n\n', empty_bin, '\n\n', (end_time - start_time), 'secs\n', (end_time - start_time)/60, 'mins')
-binning = [bin_edges, empty_bin]
-with open('qm9_binsgaussbw01.pkl', 'wb') as f:
-    pickle.dump(binning, f)
-# print(bond_info)
-# cc = np.array(bond_info['CC'])
-# print(cc)
-# bin_edges, bin_minmax, empty_bin = bin_kde(cc)
-# print('Min and Max:', bin_minmax)
-# print('Midpoints:', bin_edges, len(bin_edges))
-# print('Empty Bins:', empty_bin, len(empty_bin))
-
-
-
-def hd(data, empty_bin, bin_edges):
+def hd(mol, bin_edges, empty_bin):
     '''
     Fill bins with information from mol_feats
     '''
+    data = mol_feat(mol)
     filling = copy.deepcopy(empty_bin)
     for k in data.keys():
         for i in range(len(bin_edges[k][0])):
@@ -394,14 +373,3 @@ def hd(data, empty_bin, bin_edges):
 
     full_bin = np.array(list(chain.from_iterable(full_bin)), dtype=np.float16)
     return full_bin
-
-# # with open('qm9_dist_bins.pkl', 'rb') as fa:
-# with open('qm9_hdad_bins.pkl', 'rb') as fa:
-#     bins = pickle.load(fa)
-
-# # ex_data = {'CC': [1.1, 1.3, 1.4, 3.5, 3.6, 7.8], 'HH': [1.1, 1.3, 1.4, 3.5, 3.6, 7.8]}
-# mfile = '/Users/dakota/Molecules/QM9/QM9-sdf-rev/dsgdb9nsd_133867.sdf'
-# ex_data = mol_feat(mfile)
-# s = hd(ex_data, bins[0], bins[1])
-# # s = np.array(si.values(), dtype=np.float16)
-# print(len(s))
