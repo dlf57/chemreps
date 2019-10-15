@@ -57,8 +57,6 @@ def d_dataset(dataset):
             for j in range(i, current_molecule.n_atom):
                 atomi = current_molecule.sym[i]
                 atomj = current_molecule.sym[j]
-                zi = current_molecule.at_num[i]
-                zj = current_molecule.at_num[j]
                 if i != j:
                     if atomj < atomi:
                         atomi, atomj = atomj, atomi
@@ -102,8 +100,6 @@ def dat_dataset(dataset):
             for j in range(i, current_molecule.n_atom):
                 atomi = current_molecule.sym[i]
                 atomj = current_molecule.sym[j]
-                zi = current_molecule.at_num[i]
-                zj = current_molecule.at_num[j]
                 if i != j:
                     if atomj < atomi:
                         atomi, atomj = atomj, atomi
@@ -256,8 +252,6 @@ def dist_feats(mol_file):
         for j in range(i, current_molecule.n_atom):
             atomi = current_molecule.sym[i]
             atomj = current_molecule.sym[j]
-            zi = current_molecule.at_num[i]
-            zj = current_molecule.at_num[j]
             if i != j:
                 if atomj < atomi:
                     atomi, atomj = atomj, atomi
@@ -299,8 +293,6 @@ def dat_feats(mol_file):
         for j in range(i, current_molecule.n_atom):
             atomi = current_molecule.sym[i]
             atomj = current_molecule.sym[j]
-            zi = current_molecule.at_num[i]
-            zj = current_molecule.at_num[j]
             if i != j:
                 if atomj < atomi:
                     atomi, atomj = atomj, atomi
@@ -582,30 +574,31 @@ def hd(mol, bin_type, bins, empty_bins):
                         filling[k][0][i+1] += val2
         # TODO
         # There seems to be issues with this
+        # Only filling about half the bags it is supposed to
         # Need to sort mol_features
         # mol_data = sorted(data[k])
-        # # print(mol_data)
-        # j = 0 # used for indexing bin_edges
+        # # # print(mol_data)
+        # j = 0  # used for indexing bin_edges
         # for i in range(len(mol_data)):
-        #     if mol_data[i] <= bin_edges[k][0][j + 1]:
-        #         dist = bin_edges[k][0][j + 1] - bin_edges[k][0][j]
-        #         val1 = (bin_edges[k][0][j + 1] - mol_data[i]) / dist
+        #     if mol_data[i] <= bins[k][0][j + 1]:
+        #         dist = bins[k][0][j + 1] - bins[k][0][j]
+        #         val1 = (bins[k][0][j + 1] - mol_data[i]) / dist
         #         val2 = 1 - val1
         #         filling[k][0][j] += val1
         #         filling[k][0][j + 1] += val2
-        #     elif j > len(bin_edges[k][0]):
-        #         val = mol_data[i] - bin_edges[k][0][j]
+        #     elif j > len(bins[k][0]):
+        #         val = mol_data[i] - bins[k][0][j]
         #         filling[k][0][j] += val
-        #     while mol_data[i] > bin_edges[k][0][j + 1]:
+        #     while mol_data[i] > bins[k][0][j + 1]:
         #         # j += 1
-        #         if j == len(bin_edges[k][0]):
-        #         # if j > len(bin_edges[k][0]):
-        #             val = mol_data[i] - bin_edges[k][0][j]
-        #             filling[k][0][j] += val
+        #         if mol_data[i] > bins[k][0][-1]:
+        #             # if j > len(bin_edges[k][0]):
+        #             val = mol_data[i] - bins[k][0][j]
+        #             filling[k][0][-1] += val
         #             break
-        #         elif mol_data[i] < bin_edges[k][0][j + 1]:
-        #             dist = bin_edges[k][0][j + 1] - bin_edges[k][0][j]
-        #             val1 = (bin_edges[k][0][j + 1] - mol_data[i]) / dist
+        #         elif mol_data[i] < bins[k][0][j + 1]:
+        #             dist = bins[k][0][j + 1] - bins[k][0][j]
+        #             val1 = (bins[k][0][j + 1] - mol_data[i]) / dist
         #             val2 = 1 - val1
         #             filling[k][0][j] += val1
         #             filling[k][0][j + 1] += val2
